@@ -45,6 +45,40 @@ str(sst_clean)
 
 ### b. Visualize the data
 
+```{r message=FALSE, warning=FALSE}
+ggplot(sst_clean, aes(x = month, y = mean_monthly_sst, group = year, color = year)) +
+  #geometries for lines and points
+  geom_line(linewidth  = 1.1) +
+  geom_point(size = 2) +
+  
+  #labels of axes 
+  labs(
+    x = "Month",
+    y = "Mean monthly sea surface temperature (°C)",
+    color = "Year"
+  ) +
+
+  #color gradient from light to dark 
+  scale_color_manual(
+    values = colorRampPalette(c("#a6cee3", "#08306b"))(6)
+  ) +
+
+  #legend inside plot panel
+  theme_classic(base_size = 13) +
+  theme(
+    axis.ticks.y = element_line(color = "black"),    # show y-axis ticks
+    axis.line.y = element_line(color = "black"),      # show y-axis line
+    legend.position = c(0.15, 1.0),
+    legend.justification = c(0, 1),
+    legend.background = element_blank(),
+    panel.background = element_rect(fill = "white", color = NA),
+    panel.grid = element_blank(),
+    axis.text = element_text(size = 11),
+    axis.title = element_text(size = 13),
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10)
+  )
+```
 
 ### Problem 4a. Comparing visualizations
 
