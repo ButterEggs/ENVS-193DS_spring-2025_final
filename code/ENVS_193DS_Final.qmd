@@ -7,14 +7,51 @@ editor: visual
 ---
 
 ##### githubrepo:
+
 ##### https://github.com/ButterEggs/ENVS-193DS_spring-2025_final
+
+### Problem 2. Data visualization
+
+### a. Cleaning and summarizing
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse) #reading in packages
+  library(dplyr)
+  library(here)
+  library(gt)
+  library(janitor)
+  library(ggplot2)})
+```
+
+```{r load-data, message=FALSE, warning=FALSE}
+sst <- read_csv(here("data", "SST_update2023.csv"), show_col_types = FALSE) #reading in sst data
+sst_clean <- sst |> #cleaning sst data
+  clean_names() |> 
+  mutate(
+    date = ymd(date),
+    year = factor(year(date)),  # 
+    month = factor(month(date, label = TRUE, abbr = TRUE),
+                   levels = month.abb, 
+                   ordered = TRUE)) |>   # ordered Jan–Dec
+  filter(year %in% c("2018", "2019", "2020", "2021", "2022", "2023")) |> #filtered for years from 2018-2023
+  droplevels() |>
+  group_by(year, month) |> 
+  summarize(mean_monthly_sst = mean(temp, na.rm = TRUE), .groups = "drop")
+  
+slice_sample(sst_clean, n = 5)
+str(sst_clean)
+```
+
+### b. Visualize the data
+
 
 ### Problem 4a. Comparing visualizations
 
-i. Looking at my affective visualization on homework 3 compared to my exploratory visualization on homework 2, my affective visualization conveys a more representational meaning. The drawings, pictures, and symbols convey the variables that influenced the visuals of my data but is not accurate or to-scale. On the other hand my exploratory visualization uses accurate to-scale plots that represent my data and is meant for analysis.
+i.  Looking at my affective visualization on homework 3 compared to my exploratory visualization on homework 2, my affective visualization conveys a more representational meaning. The drawings, pictures, and symbols convey the variables that influenced the visuals of my data but is not accurate or to-scale. On the other hand my exploratory visualization uses accurate to-scale plots that represent my data and is meant for analysis.
 
 ii. Looking at both types of visualizations, they both convey the same data which is steps vs school day and also temperature. Both visualizations emphasize how the steps variable is influenced by either the type of day or temperature.
 
-iii. With only 3 observations in my exploratory visualization since I just started to collect data, I only had the mean steps for school days which was about 7000 steps. Similarly for the steps vs temperature plot, no trends could be made since  there was only 3 observations. For the affective visualization, I made the assumption that steps were higher on non-school days than school days, in addition to having all the other variables pointing towards that assumption.
+iii. With only 3 observations in my exploratory visualization since I just started to collect data, I only had the mean steps for school days which was about 7000 steps. Similarly for the steps vs temperature plot, no trends could be made since there was only 3 observations. For the affective visualization, I made the assumption that steps were higher on non-school days than school days, in addition to having all the other variables pointing towards that assumption.
 
 iv. Feedback on my visualization included adding a some type of representation for what a school day looked like compared to a non-school day. With this feedback, I included a photo of Storke tower to represent a school day and a photo of my workplace to represent my non-school days. I also received feedback about incorporating my actual data making my visualization to-scale, although I didn't do this since it was just supposed to be more of a representation.
