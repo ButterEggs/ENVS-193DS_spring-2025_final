@@ -4,13 +4,33 @@ author: "Jason Han"
 date: 6/7/2025
 format: html
 editor: visual
+execute:
+  warning: false
+  error: false
+  message: false
 ---
 
 ##### githubrepo:
 
 ##### https://github.com/ButterEggs/ENVS-193DS_spring-2025_final
 
-### Problem 1.
+### Reading in data for Problem 2 and 3 
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse) #reading in packages
+  library(dplyr)
+  library(here)
+  library(gt)
+  library(janitor)
+  library(ggplot2)})
+
+sst <- read_csv(here("data", "SST_update2023.csv"), show_col_types = FALSE) #reading in sst data
+
+nest_boxes <- read_csv(here("data", "occdist.csv"))
+```
+
+### Problem 1. Research writing 
 
 ### a. Transparent statistical methods
 
@@ -32,17 +52,6 @@ ii. We found that there is a (insert effect size) difference in average nitrogen
 ### a. Cleaning and summarizing
 
 ```{r}
-suppressPackageStartupMessages({
-  library(tidyverse) #reading in packages
-  library(dplyr)
-  library(here)
-  library(gt)
-  library(janitor)
-  library(ggplot2)})
-```
-
-```{r load-data, message=FALSE, warning=FALSE}
-sst <- read_csv(here("data", "SST_update2023.csv"), show_col_types = FALSE) #reading in sst data
 sst_clean <- sst |> #cleaning sst data
   clean_names() |> 
   mutate(
@@ -96,6 +105,58 @@ ggplot(sst_clean, aes(x = month, y = mean_monthly_sst, group = year, color = yea
     legend.text = element_text(size = 10)
   )
 ```
+
+### Problem 3. Data analysis
+
+```{r echo=FALSE}
+
+```
+
+### a. Response variable 
+
+In this dataset, the columns sp, cs, e, and tm are binary response variables representing if nest boxes are occupied by specific species. A value of 1 means the nest box was occupied by that species for example a swift parrot, while a 0 means it was either occupied by a different species or left empty.
+
+
+### b. Purpose of study
+
+The Swift Parrots are the target species for nest box restoration, while the others are competitors that may exploit the boxes. The Common Starlings are invasive and although the Tree Martins are native they both pose a threat towards the restoration effort by outcompeting the endangered parrots for nesting sites.
+
+### c. Difference in “seasons”
+
+The two seasons in the study are 2016 and 2019. In 2016, the nest boxes had just been deployed, whereas by 2019, they had been established for three years, allowing researchers to assess how box age influenced occupancy patterns and competitor behavior over time.
+
+### d. Table of models
+
+
+
+### e. Run the models
+
+
+
+### f. Check the diagnostics
+
+
+
+### g. Select the best model
+
+
+
+### h. Visualize the model predictions 
+
+
+
+### i. Write a caption for your figure.
+
+
+
+### j. Calculate model predictions
+
+
+
+### k. Interpret your results
+
+
+
 
 ### Problem 4a. Comparing visualizations
 
