@@ -14,7 +14,7 @@ execute:
 
 ##### https://github.com/ButterEggs/ENVS-193DS_spring-2025_final
 
-### Reading in data for Problem 2 and 3 
+### Reading in data for Problem 2 and 3
 
 ```{r}
 suppressPackageStartupMessages({
@@ -23,14 +23,15 @@ suppressPackageStartupMessages({
   library(here)
   library(gt)
   library(janitor)
-  library(ggplot2)})
+  library(ggplot2)
+  library(DHARMa)})
 
 sst <- read_csv(here("data", "SST_update2023.csv"), show_col_types = FALSE) #reading in sst data
 
 nest_boxes <- read_csv(here("data", "occdist.csv"))
 ```
 
-### Problem 1. Research writing 
+### Problem 1. Research writing
 
 ### a. Transparent statistical methods
 
@@ -38,14 +39,13 @@ In part 1, they used a Pearson's correlation test. In part 2, they used a ANOVA 
 
 ### b. More information needed
 
-In part 2, the one-way ANOVA test compares the nitrogen loads from five different sources showing how at least one group differs from the others, but not which ones. This is shown with a statistically significant result of (p = 0.02). With this information, we need to conduct a Tukey’s Honestly Significant Difference (HSD) test in order to identify which specific sources, such as fertilizer or urban runoff, have significantly different mean nitrogen loads. This would help clarify the biological relevance of the results by showing which sources are driving the overall difference. Furthermore, the p-value tells us that the result is statistically significant, but doesn’t indicate how much variance in the nitrogen load is explained by the type of source. This is why an effect size for ANOVA would help add context to assess if the differences between the sources are biologically meaningful. 
+In part 2, the one-way ANOVA test compares the nitrogen loads from five different sources showing how at least one group differs from the others, but not which ones. This is shown with a statistically significant result of (p = 0.02). With this information, we need to conduct a Tukey’s Honestly Significant Difference (HSD) test in order to identify which specific sources, such as fertilizer or urban runoff, have significantly different mean nitrogen loads. This would help clarify the biological relevance of the results by showing which sources are driving the overall difference. Furthermore, the p-value tells us that the result is statistically significant, but doesn’t indicate how much variance in the nitrogen load is explained by the type of source. This is why an effect size for ANOVA would help add context to assess if the differences between the sources are biologically meaningful.
 
 ### c. Suggestions for rewriting
 
-i. We found a (insert effect size) relationship between distance from headwater (km) and annual total nitrogen load (kg year⁻¹), (Pearson’s correlation test: r = correlation coefficient, p = 0.03, α = significance level)
+i.  We found a (insert effect size) relationship between distance from headwater (km) and annual total nitrogen load (kg year⁻¹), (Pearson’s correlation test: r = correlation coefficient, p = 0.03, α = significance level)
 
-ii. We found that there is a (insert effect size) difference in average nitrogen load (kg year⁻¹) between source: urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands (one-way ANOVA, F(4, df_within) = F-statistic, p = 0.02, α = significance level). 
-
+ii. We found that there is a (insert effect size) difference in average nitrogen load (kg year⁻¹) between source: urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands (one-way ANOVA, F(4, df_within) = F-statistic, p = 0.02, α = significance level).
 
 ### Problem 2. Data visualization
 
@@ -109,13 +109,13 @@ ggplot(sst_clean, aes(x = month, y = mean_monthly_sst, group = year, color = yea
 ### Problem 3. Data analysis
 
 ```{r echo=FALSE}
-
+nest_boxes_clean <- nest_boxes |> #cleaning nest_boxes data
+  clean_names()
 ```
 
-### a. Response variable 
+### a. Response variable
 
 In this dataset, the columns sp, cs, e, and tm are binary response variables representing if nest boxes are occupied by specific species. A value of 1 means the nest box was occupied by that species for example a swift parrot, while a 0 means it was either occupied by a different species or left empty.
-
 
 ### b. Purpose of study
 
@@ -127,36 +127,64 @@ The two seasons in the study are 2016 and 2019. In 2016, the nest boxes had just
 
 ### d. Table of models
 
-
+| model number | season | distance to forest edge | model description |
+|----|----|----|----|
+| 0 |  |  | No predictors (null model) |
+| 1 | X | X | Year + Distance (saturated model) |
+| 2 | X |  | Year |
+| 3 |  | X | Distance to forest edge |
+|  |  |  |  |
 
 ### e. Run the models
 
+```{r}
+#null model
+model0 <- glm(
+  sp ~ 1, # formula
+  data = nest_boxes_clean, # data frame
+  family = binomial())
 
+#all predictors
+model1 <- glm(
+  sp ~ season + edge_distance, # formula
+  data = nest_boxes_clean, # data frame
+  family = binomial())
+
+#SLA and water treatment
+model2 <- glm(
+  sp ~ season,
+  data = nest_boxes_clean,
+  family = binomial())
+
+#SLA and species
+model3 <- glm(
+  sp ~ edge_distance,
+  data = nest_boxes_clean,
+  family = binomial())
+```
 
 ### f. Check the diagnostics
 
+```{r}
+#displaying the diagnostic plots for each model
+Model0 <- plot(simulateResiduals(model0)) #for null model
 
+Model1 <- plot(simulateResiduals(model1)) #for saturated model
+
+Model2 <- plot(simulateResiduals(model2)) #for season predictor 
+
+Model3 <- plot(simulateResiduals(model3)) #for distance from forest edge predictor
+```
 
 ### g. Select the best model
 
-
-
-### h. Visualize the model predictions 
-
-
+### h. Visualize the model predictions
 
 ### i. Write a caption for your figure.
 
-
-
 ### j. Calculate model predictions
 
-
-
 ### k. Interpret your results
-
-
-
 
 ### Problem 4a. Comparing visualizations
 
