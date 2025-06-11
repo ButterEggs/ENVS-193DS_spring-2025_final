@@ -10,6 +10,20 @@ editor: visual
 
 ##### https://github.com/ButterEggs/ENVS-193DS_spring-2025_final
 
+### Problem 1.
+
+### a. Transparent statistical methods
+
+In part 1, they used a Pearson's correlation test. In part 2, they used a ANOVA test.
+
+### b. More information needed
+
+In part 2, the one-way ANOVA test compares the nitrogen loads from five different sources showing how at least one group differs from the others, but not which ones. This is shown with a statistically significant result of (p = 0.02). With this information, we need to conduct a Tukey’s Honestly Significant Difference (HSD) test in order to identify which specific sources, such as fertilizer or urban runoff, have significantly different mean nitrogen loads. This would help clarify the biological relevance of the results by showing which sources are driving the overall difference. Furthermore, the p-value tells us that the result is statistically significant, but doesn’t indicate how much variance in the nitrogen load is explained by the type of source. This is why an effect size for ANOVA would help add context to assess if the differences between the sources are biologically meaningful. 
+
+### c. Suggestions for rewriting
+
+
+
 ### Problem 2. Data visualization
 
 ### a. Cleaning and summarizing
