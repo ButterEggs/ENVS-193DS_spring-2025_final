@@ -116,6 +116,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="httpsgithub.combuttereggsenvs-193ds_spring-2025_final" class="level5">
 <h5 class="anchored" data-anchor-id="httpsgithub.combuttereggsenvs-193ds_spring-2025_final">https://github.com/ButterEggs/ENVS-193DS_spring-2025_final</h5>
 </section>
+<section id="problem-1." class="level3">
+<h3 class="anchored" data-anchor-id="problem-1.">Problem 1.</h3>
+</section>
+<section id="a.-transparent-statistical-methods" class="level3">
+<h3 class="anchored" data-anchor-id="a.-transparent-statistical-methods">a. Transparent statistical methods</h3>
+<p>In part 1, they used a Pearson’s correlation test. In part 2, they used a ANOVA test.</p>
+</section>
+<section id="b.-more-information-needed" class="level3">
+<h3 class="anchored" data-anchor-id="b.-more-information-needed">b. More information needed</h3>
+<p>In part 2, the one-way ANOVA test compares the nitrogen loads from five different sources showing how at least one group differs from the others, but not which ones. This is shown with a statistically significant result of (p = 0.02). With this information, we need to conduct a Tukey’s Honestly Significant Difference (HSD) test in order to identify which specific sources, such as fertilizer or urban runoff, have significantly different mean nitrogen loads. This would help clarify the biological relevance of the results by showing which sources are driving the overall difference. Furthermore, the p-value tells us that the result is statistically significant, but doesn’t indicate how much variance in the nitrogen load is explained by the type of source. This is why an effect size for ANOVA would help add context to assess if the differences between the sources are biologically meaningful.</p>
+</section>
+<section id="c.-suggestions-for-rewriting" class="level3">
+<h3 class="anchored" data-anchor-id="c.-suggestions-for-rewriting">c.&nbsp;Suggestions for rewriting</h3>
+<ol type="i">
+<li><p>We found a (insert effect size) relationship between distance from headwater (km) and annual total nitrogen load (kg year⁻¹), (Pearson’s correlation test: r = correlation coefficient, p = 0.03, α = significance level)</p></li>
+<li><p>We found that there is a (insert effect size) difference in average nitrogen load (kg year⁻¹) between source: urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands (one-way ANOVA, F(4, df_within) = F-statistic, p = 0.02, α = significance level).</p></li>
+</ol>
+</section>
 <section id="problem-2.-data-visualization" class="level3">
 <h3 class="anchored" data-anchor-id="problem-2.-data-visualization">Problem 2. Data visualization</h3>
 </section>
@@ -150,11 +168,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 5 × 3
   year  month mean_monthly_sst
   &lt;fct&gt; &lt;ord&gt;            &lt;dbl&gt;
-1 2018  Sep               18.2
-2 2023  Nov               16.8
-3 2023  Dec               16.1
-4 2018  Feb               14.3
-5 2019  Jan               14.7</code></pre>
+1 2019  Jan               14.7
+2 2023  Oct               17.4
+3 2018  Mar               13.5
+4 2023  Jul               16.3
+5 2020  Apr               14.3</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sst_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">

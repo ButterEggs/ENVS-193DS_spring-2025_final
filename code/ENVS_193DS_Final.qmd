@@ -22,6 +22,9 @@ In part 2, the one-way ANOVA test compares the nitrogen loads from five differen
 
 ### c. Suggestions for rewriting
 
+i. We found a (insert effect size) relationship between distance from headwater (km) and annual total nitrogen load (kg year⁻¹), (Pearson’s correlation test: r = correlation coefficient, p = 0.03, α = significance level)
+
+ii. We found that there is a (insert effect size) difference in average nitrogen load (kg year⁻¹) between source: urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands (one-way ANOVA, F(4, df_within) = F-statistic, p = 0.02, α = significance level). 
 
 
 ### Problem 2. Data visualization
