@@ -24,11 +24,13 @@ suppressPackageStartupMessages({
   library(gt)
   library(janitor)
   library(ggplot2)
-  library(DHARMa)})
+  library(DHARMa)
+  library(MuMIn)
+  library(ggeffects)})
 
 sst <- read_csv(here("data", "SST_update2023.csv"), show_col_types = FALSE) #reading in sst data
 
-nest_boxes <- read_csv(here("data", "occdist.csv"))
+nest_boxes <- read_csv(here("data", "occdist.csv")) #reading in nest_boxes data
 ```
 
 ### Problem 1. Research writing
@@ -167,24 +169,84 @@ model3 <- glm(
 
 ```{r}
 #displaying the diagnostic plots for each model
-Model0 <- plot(simulateResiduals(model0)) #for null model
+Model0 <- plot(simulateResiduals(model0)) #plot for null model
 
-Model1 <- plot(simulateResiduals(model1)) #for saturated model
+Model1 <- plot(simulateResiduals(model1)) #plot for saturated model
 
-Model2 <- plot(simulateResiduals(model2)) #for season predictor 
+Model2 <- plot(simulateResiduals(model2)) #plot for season predictor 
 
-Model3 <- plot(simulateResiduals(model3)) #for distance from forest edge predictor
+Model3 <- plot(simulateResiduals(model3)) #plot for distance from forest edge predictor
 ```
 
 ### g. Select the best model
 
+```{r}
+AICc(model1,
+     model2,
+     model3,
+     model0) |> 
+  arrange(AICc)
+```
+The best model, as determined by Akaike’s Information Criterion (AIC), includes season and distance from the forest edge as predictors of Swift Parrot nest box occupancy and had the lowest AIC value of 226.3133.
+
 ### h. Visualize the model predictions
+
+```{r}
+model_prediction <- ggpredict(model1, terms = c("edge_distance [all]", "season")) |>
+  rename(season = group) 
+
+nest_boxes_clean <- nest_boxes_clean |> 
+  mutate(
+    sp = as.numeric(sp),
+    season = factor(season))
+
+# Plot
+ggplot(data = nest_boxes_clean, 
+       aes(x = edge_distance, y = sp, color = season)) +
+  
+  geom_point(alpha = 0.45, size = 2) +
+
+  geom_ribbon(data = model_prediction,
+              aes(x = x, ymin = conf.low, ymax = conf.high, fill = season),
+              alpha = 0.2, inherit.aes = FALSE) +
+
+
+  geom_line(data = model_prediction,
+            aes(x = x, y = predicted, color = season),
+            linewidth = 1.1, inherit.aes = FALSE) +
+
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) +
+  scale_fill_manual(values = c("2016" = "#a6cee3", "2019" = "#08306b")) +
+  scale_color_manual(values = c("2016" = "#a6cee3", "2019" = "#08306b")) +
+
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.background = element_blank(),
+    panel.grid = element_blank(),
+    axis.ticks = element_line(color = "black"),
+    axis.line = element_line(color = "black"),
+    legend.position = c(0.9, 0.6)) +
+
+  labs(
+  title = "Swift Parrot Nest Box Use by Distance from Forest Edge",
+  x = "Distance from forest edge (m)",
+  y = "Probability of nest box occupancy (%)",
+  fill = "Season", 
+  color = "Season")
+
+```
 
 ### i. Write a caption for your figure.
 
+
+
 ### j. Calculate model predictions
 
+
+
 ### k. Interpret your results
+
+
 
 ### Problem 4a. Comparing visualizations
 
