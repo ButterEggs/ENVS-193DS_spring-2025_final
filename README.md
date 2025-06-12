@@ -2,7 +2,7 @@
 
 General Information:
 
-This repository contains the final assignment for ENVS 193DS by Jason Han. The project includes data analysis and visualizations based on two datasets: sea surface temperature (SST) in the Santa Barbara Channel and nest box occupancy data for Swift Parrots. All code and outputs were created and compiled by Jason. The SST dataset was obtained from the SBC LTER data catalog, and the Swift Parrot dataset (occdist.csv) was published by researchers at the Australian National University (https://datadryad.org/dataset/doi:10.5061/dryad.83bk3j9sb). The analysis includes monthly SST trends from 2018–2023 and logistic regression modeling of Swift Parrot nest box occupancy based on forest edge distance and season.
+This repository contains the final assignment for ENVS 193DS by Jason Han (GitUser: ButterEggs). The project includes data analysis and visualizations based on two datasets: sea surface temperature (SST) in the Santa Barbara Channel and nest box occupancy data for Swift Parrots. All code and outputs were created and compiled by Jason. The SST dataset was obtained from the SBC LTER data catalog, and the Swift Parrot dataset (occdist.csv) was published by researchers at the Australian National University (https://datadryad.org/dataset/doi:10.5061/dryad.83bk3j9sb). The analysis includes monthly SST trends from 2018–2023 and logistic regression modeling of Swift Parrot nest box occupancy based on forest edge distance and season.
 
 Data and File Information:
 
