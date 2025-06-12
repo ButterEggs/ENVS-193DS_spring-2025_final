@@ -1,7 +1,7 @@
 ---
 title: "ENVS_193DS_Final"
 author: "Jason Han"
-date: 6/7/2025
+date: 6/11/2025
 format: html
 editor: visual
 execute:
@@ -58,50 +58,46 @@ ii. We found that there is a (insert effect size) difference in average nitrogen
 sst_clean <- sst |> #cleaning sst data
   clean_names() |> 
   mutate(
-    date = ymd(date),
-    year = factor(year(date)),  # 
-    month = factor(month(date, label = TRUE, abbr = TRUE),
+    date = ymd(date), #convert 'date' column to Date format
+    year = factor(year(date)),  #took year from 'date' converting into factor
+    month = factor(month(date, label = TRUE, abbr = TRUE), #taking the month and converting into factor
                    levels = month.abb, 
                    ordered = TRUE)) |>   # ordered Jan–Dec
-  filter(year %in% c("2018", "2019", "2020", "2021", "2022", "2023")) |> #filtered for years from 2018-2023
-  droplevels() |>
-  group_by(year, month) |> 
-  summarize(mean_monthly_sst = mean(temp, na.rm = TRUE), .groups = "drop")
+  filter(year %in% c("2018", "2019", "2020", "2021", "2022", "2023")) |> #keep only data from 2018 to 2023 
+  droplevels() |>  #dropped unused factor levels for 'year' and 'month'
+  group_by(year, month) |>  #grouped data by year and month
+  summarize(mean_monthly_sst = mean(temp, na.rm = TRUE), .groups = "drop") #calculate the mean sea surface temperature for each group
   
-slice_sample(sst_clean, n = 5)
-str(sst_clean)
+slice_sample(sst_clean, n = 5) #previewing a random sample of 5 rows from the cleaned dataset
+str(sst_clean) #displaying the structure of the cleaned and summarized dataset
 ```
 
 ### b. Visualize the data
 
 ```{r message=FALSE, warning=FALSE}
-ggplot(sst_clean, aes(x = month, y = mean_monthly_sst, group = year, color = year)) +
-  #geometries for lines and points
-  geom_line(linewidth  = 1.1) +
-  geom_point(size = 2) +
+ggplot(sst_clean, aes(x = month, y = mean_monthly_sst, group = year, color = year)) + #creating a line plot of mean monthly sea surface temperature by month, grouped and colored by year
+
+  geom_line(linewidth  = 1.1) +  #added lines for each year with thicker line width
+  geom_point(size = 2) + #added points at each month to show individual data values
   
-  #labels of axes 
   labs(
-    x = "Month",
-    y = "Mean monthly sea surface temperature (°C)",
-    color = "Year"
-  ) +
+    x = "Month", #labeled x-axis 
+    y = "Mean monthly sea surface temperature (°C)", #labeled y-axis 
+    color = "Year") +
 
-  #color gradient from light to dark 
-  scale_color_manual(
-    values = colorRampPalette(c("#a6cee3", "#08306b"))(6)
-  ) +
+  scale_color_manual( 
+    values = colorRampPalette(c("#a6cee3", "#08306b"))(6)) +  #used a custom color gradient (from light blue to dark blue)
 
-  #legend inside plot panel
   theme_classic(base_size = 13) +
   theme(
-    axis.ticks.y = element_line(color = "black"),    # show y-axis ticks
-    axis.line.y = element_line(color = "black"),      # show y-axis line
-    legend.position = c(0.15, 1.0),
-    legend.justification = c(0, 1),
-    legend.background = element_blank(),
+    axis.ticks.y = element_line(color = "black"), #added black ticks on y-axis
+    axis.line.y = element_line(color = "black"), #added black axis line on y-axis   
+    legend.position = c(0.15, 1.0), #moved legend to top-left inside the plot
+    legend.justification = c(0, 1), #anchored legend to top-left corner
+    legend.background = element_blank(), #removed background fill from legend
     panel.background = element_rect(fill = "white", color = NA),
-    panel.grid = element_blank(),
+    panel.grid = element_blank(), #removed grid lines
+    #setting size for axis text, axis title, legend title, and legend text.
     axis.text = element_text(size = 11),
     axis.title = element_text(size = 13),
     legend.title = element_text(size = 12),
@@ -141,22 +137,22 @@ The two seasons in the study are 2016 and 2019. In 2016, the nest boxes had just
 ### e. Run the models
 
 ```{r}
-model0 <- glm(
+model0 <- glm( # Null model
   sp ~ 1, 
   data = nest_boxes_clean,
   family = binomial())
 
-model1 <- glm(
+model1 <- glm( # Full model (saturated)
   sp ~ season + edge_distance, 
   data = nest_boxes_clean, 
   family = binomial())
 
-model2 <- glm(
+model2 <- glm( # Model with only season as a predictor
   sp ~ season,
   data = nest_boxes_clean,
   family = binomial())
 
-model3 <- glm(
+model3 <- glm( # Model with only distance to forest edge as a predictor
   sp ~ edge_distance,
   data = nest_boxes_clean,
   family = binomial())
@@ -178,11 +174,11 @@ Model3 <- plot(simulateResiduals(model3)) #plot for distance from forest edge pr
 ### g. Select the best model
 
 ```{r}
-AICc(model1,
+AICc(model1, #compute AICc (Akaike Information Criterion) for each model
      model2,
      model3,
      model0) |> 
-  arrange(AICc)
+  arrange(AICc) #arrange the models in ascending order of AICc
 ```
 
 The best model, as determined by Akaike’s Information Criterion (AIC), includes season and distance from the forest edge as predictors of Swift Parrot nest box occupancy and has the lowest AIC value of 226.31.
@@ -190,31 +186,35 @@ The best model, as determined by Akaike’s Information Criterion (AIC), include
 ### h. Visualize the model predictions
 
 ```{r}
-model_prediction <- ggpredict(model1, terms = c("edge_distance [all]", "season")) |>
-  rename(season = group) 
+model_prediction <- ggpredict(model1, terms = c("edge_distance [all]", "season")) |> #generated model predictions from the best model (model1) across all values of edge_distance, grouped by season
+  rename(season = group) #converting season to a factor 
 
 nest_boxes_clean <- nest_boxes_clean |> 
   mutate(
-    sp = as.numeric(sp),
+    sp = as.numeric(sp),  #making sure the response variable is numeric
     season = factor(season))
 
+#creating the ggplot visualization
 ggplot(data = nest_boxes_clean, 
        aes(x = edge_distance, y = sp, color = season)) +
   
-  geom_point(alpha = 0.45, size = 2) +
+  geom_point(alpha = 0.45, size = 2) +  #adding raw data points with transparency
 
-  geom_ribbon(data = model_prediction,
+  geom_ribbon(data = model_prediction, #adding 95% confidence intervals from model predictions
               aes(x = x, ymin = conf.low, ymax = conf.high, fill = season),
               alpha = 0.2, inherit.aes = FALSE) +
 
-  geom_line(data = model_prediction,
+  geom_line(data = model_prediction, #adding model predicted probability lines
             aes(x = x, y = predicted, color = season),
             linewidth = 1.1, inherit.aes = FALSE) +
 
-  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) +
+  scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) + #y-axis scaled for probability
+  
+  #adding custom colors and fill  for each season
   scale_fill_manual(values = c("2016" = "#a6cee3", "2019" = "#08306b")) +
   scale_color_manual(values = c("2016" = "#a6cee3", "2019" = "#08306b")) +
 
+  #adding a minimal theme and adjusting appearance
   theme_minimal(base_size = 14) +
   theme(
     panel.background = element_blank(),
@@ -223,7 +223,7 @@ ggplot(data = nest_boxes_clean,
     axis.line = element_line(color = "black"),
     legend.position = c(0.9, 0.6)) +
 
-  labs(
+  labs( #adding labels 
   title = "Swift Parrot Nest Box Use by Distance from Forest Edge",
   x = "Distance from forest edge (m)",
   y = "Probability of nest box occupancy (%)",
@@ -248,7 +248,7 @@ ggpredict(model1,
 
 ### k. Interpret your results
 
-Swift Parrots are more likely to use nest boxes that are positioned closer to the forest edge, as shown in the figure from part h. The model predictions from part j show that in 2016, the probability of occupancy at 0 meters from the forest edge is 0.48 (95% CI: [0.33, 0.64]), while at 900 meters it drops to 0.12 (95% CI: [0.06, 0.24]). For the 2019 season, the likelihood of occupancy at 0 meters is 0.30 (95% CI: [0.18, 0.44]), and only 0.06 (95% CI: [0.03, 0.13]) at 900 meters. These results indicate that Swift Parrots prefer nest boxes near forest edges, likely due to better access to foraging habitat and natural cavities, while also avoiding areas with higher densities of competitors. The results also suggest that Swift Parrots may be avoiding competition from Tree Martins, which show the opposite pattern, as their probability of nest box occupancy increases with greater distance from the forest edge, indicating that they may dominate boxes located farther from forested areas.
+Swift Parrots are more likely to use nest boxes that are positioned closer to the forest edge, as shown in the figure from part h. The model predictions from part j show that in 2016, the probability of occupancy at 0 meters from the forest edge is 0.48 (95% CI: \[0.33, 0.64\]), while at 900 meters it drops to 0.12 (95% CI: \[0.06, 0.24\]). For the 2019 season, the likelihood of occupancy at 0 meters is 0.30 (95% CI: \[0.18, 0.44\]), and only 0.06 (95% CI: \[0.03, 0.13\]) at 900 meters. These results indicate that Swift Parrots prefer nest boxes near forest edges, likely due to better access to foraging habitat and natural cavities, while also avoiding areas with higher densities of competitors. The results also suggest that Swift Parrots may be avoiding competition from Tree Martins, which show the opposite pattern, as their probability of nest box occupancy increases with greater distance from the forest edge, indicating that they may dominate boxes located farther from forested areas.
 
 ### Problem 4a. Comparing visualizations
 
