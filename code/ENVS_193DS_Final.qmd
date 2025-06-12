@@ -15,7 +15,7 @@ toc: true
 
 ##### https://github.com/ButterEggs/ENVS-193DS_spring-2025_final
 
-### Reading in data for Problem 2 and 3
+### Set up chunk for Problem 2 and 3
 
 ```{r}
 suppressPackageStartupMessages({
@@ -27,7 +27,7 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(DHARMa)
   library(MuMIn)
-  library(ggeffects)})
+  library(ggeffects)}) 
 
 sst <- read_csv(here("data", "SST_update2023.csv"), show_col_types = FALSE) #reading in sst data
 
@@ -239,16 +239,16 @@ ggplot(data = nest_boxes_clean,
 ### j. Calculate model predictions
 
 ```{r}
-ggpredict(model1, 
+ggpredict(model1, #calculating the predicted probaility at 0m and 900m for 2016
           terms = c("edge_distance [0, 900]", "season [2016]"))
 
-ggpredict(model1, 
+ggpredict(model1, #calculating the predicted probaility at 0m and 900m for 2016
           terms = c("edge_distance [0, 900]", "season [2019]"))
 ```
 
 ### k. Interpret your results
 
-Swift Parrots are more likely to use nest boxes that are positioned closer to the forest edge, as shown in the figure from part h. The model predictions from part j show that in 2016, the probability of occupancy at 0 meters from the forest edge is 0.48 (95% CI: \[0.33, 0.64\]), while at 900 meters it drops to 0.12 (95% CI: \[0.06, 0.24\]). For the 2019 season, the likelihood of occupancy at 0 meters is 0.30 (95% CI: \[0.18, 0.44\]), and only 0.06 (95% CI: \[0.03, 0.13\]) at 900 meters. These results indicate that Swift Parrots prefer nest boxes near forest edges, likely due to better access to foraging habitat and natural cavities, while also avoiding areas with higher densities of competitors. The results also suggest that Swift Parrots may be avoiding competition from Tree Martins, which show the opposite pattern, as their probability of nest box occupancy increases with greater distance from the forest edge, indicating that they may dominate boxes located farther from forested areas.
+Swift Parrots are more likely to use nest boxes that are positioned closer to the forest edge, as shown in the figure from part h. The model predictions from part j show that in 2016, the probability of occupancy at 0 meters from the forest edge is 0.48 (95% CI: \[0.33, 0.64\]), while at 900 meters it drops to 0.12 (95% CI: \[0.06, 0.24\]). For the 2019 season, the likelihood of occupancy at 0 meters is 0.30 (95% CI: \[0.18, 0.44\]), and only 0.06 (95% CI: \[0.03, 0.13\]) at 900 meters. These results indicate that Swift Parrots prefer nest boxes near forest edges, likely due to better access to foraging habitat and natural cavities, while also avoiding areas with higher densities of competitors. The results also suggest that Swift Parrots may be avoiding competition from Tree Martins, which show the opposite pattern, as their probability of nest box occupancy increases with greater distance from the forest edge.
 
 ### Problem 4a. Comparing visualizations
 
