@@ -8,6 +8,7 @@ Data and File Information:
 
 This repository includes two main folders: code and data. The code folder contains all analysis and figures from the ENVS_193DS_Final.qmd Quarto file. The Data folder includes all datasets used in the project, including sea surface temperature data and the Swift Parrot nest box occupancy dataset.
 
+```
 ├── code
 │   ├── ENVS_193DS_Final.html
 │   ├── ENVS_193DS_Final.qmd
@@ -40,6 +41,7 @@ This repository includes two main folders: code and data. The code folder contai
 │   └── SST_update2023.csv
 ├── ENVS-193DS_spring-2025_final.Rproj
 └── README.md
+```
 
 Rendered Output:
 
